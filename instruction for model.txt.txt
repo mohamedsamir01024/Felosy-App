@@ -1,0 +1,44 @@
+Extract receipt data in Python.
+
+Convert the extracted information into JSON.
+
+Send a POST request to your Spring Boot backend.
+
+Spring Boot receives the JSON and stores it in MySQL (your schema with transactions, receipts, receipt_items).
+
+I can modify your Python code to:
+
+Parse text for store name, date, total, items (basic extraction).
+
+Send the data via HTTP POST to Spring Boot.
+Key Points:
+
+Parsing:
+
+Total amount, receipt date, store name, and items are extracted using regex.
+
+You can improve this with more advanced NLP for messy receipts.
+
+Sending to Spring Boot:
+
+The data dictionary is converted to JSON.
+
+A POST request is sent to http://localhost:8080/api/receipts.
+
+Spring Boot backend:
+
+You need a REST controller like:
+
+@RestController
+@RequestMapping("/api/receipts")
+public class ReceiptController {
+
+    @Autowired
+    private ReceiptService receiptService;
+
+    @PostMapping
+    public ResponseEntity<Receipt> createReceipt(@RequestBody ReceiptDTO dto) {
+        Receipt receipt = receiptService.saveReceiptFromDTO(dto);
+        return ResponseEntity.ok(receipt);
+    }
+}
